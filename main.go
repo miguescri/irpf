@@ -6,11 +6,13 @@ import (
 	"math"
 )
 
-type RetValues struct {
+// RetValue contains the percentage to be retained for an amount in the [min,max] interval
+type RetValue struct {
 	min, max, percentage float64
 }
 
-var values = []RetValues{
+// values are the current IRPF intervals in Spain
+var values = []RetValue{
 	{0, 12450, 0.19},
 	{12450, 20200, 0.24},
 	{20200, 35200, 0.30},
@@ -33,7 +35,8 @@ func main() {
 	fmt.Println("Net monthly income:", month, "€")
 }
 
-func PartialRetention(amount float64, v RetValues) float64 {
+// PartialRetention returns the retention to be applied to an amount given a RetValue
+func PartialRetention(amount float64, v RetValue) float64 {
 	switch {
 	case amount <= v.min:
 		return 0
@@ -44,7 +47,8 @@ func PartialRetention(amount float64, v RetValues) float64 {
 	}
 }
 
-func TotalRetention(amount float64, values []RetValues) float64 {
+// TotalRetention returns the sum of the retentions to be applied to an amount given a list of RetValue
+func TotalRetention(amount float64, values []RetValue) float64 {
 	total := 0.0
 	for _, v := range values {
 		total += PartialRetention(amount, v)
