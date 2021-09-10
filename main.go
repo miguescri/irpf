@@ -23,16 +23,19 @@ var values = []RetValue{
 
 func main() {
 	amount := flag.Float64("a", 0.0, "raw annual income")
+	payments := flag.Int("p", 12, "number of individual payments")
 	flag.Parse()
 
 	ret := TotalRetention(*amount, values)
 	net := *amount - ret
-	month := net / 12
+	retPercent := ret * 100 / *amount
+	month := net / float64(*payments)
 
 	fmt.Println("Raw income:", *amount, "€")
 	fmt.Println("Retention:", ret, "€")
+	fmt.Println("Retention percentage:", retPercent, "%")
 	fmt.Println("Net income:", net, "€")
-	fmt.Println("Net monthly income:", month, "€")
+	fmt.Println("Net income per payment (", *payments, "pays):", month, "€")
 }
 
 // PartialRetention returns the retention to be applied to an amount given a RetValue
